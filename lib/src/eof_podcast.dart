@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
 import 'eof_episode.dart';
@@ -122,7 +124,7 @@ class EOFPodcast {
   static Future<EOFPodcast> fromFeed(String uri) async {
     try {
       final rssResponse = await http.get(uri);
-      final document = parse(rssResponse.body);
+      final document = parse(utf8.decode(rssResponse.bodyBytes));
       return EOFPodcast(document);
     } catch (e) {
       return null;
