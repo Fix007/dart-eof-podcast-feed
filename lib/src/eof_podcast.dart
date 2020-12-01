@@ -10,49 +10,88 @@ class EOFPodcast {
   /// Constructor
   /// XmlDocument [_docXML]
   EOFPodcast(XmlDocument _docXML) {
-    //
     // Read the Podcast Author
-    author = _docXML.findAllElements('itunes:author').isEmpty
-        ? _docXML.findAllElements('author').first.text
-        : _docXML.findAllElements('itunes:author').first.text;
-    // Read the Podcast Title
-    title = _docXML.findAllElements('title').first.text;
-    // Read the Podcast URL
-    url = _docXML.findAllElements('link').first.text;
-    // Read the Podcast Copyright
-    copyright = _docXML.findAllElements('copyright').first.text;
-    // Read the Podcast Description
-    description = _docXML.findAllElements('description').first.text;
-    // Read the Podcast Cover URL
-    podcastCoverUrl =
-        _docXML.findAllElements('image').first.findElements('url').first.text;
+    try {
+      author = _docXML.findAllElements('itunes:author').isEmpty
+          ? _docXML.findAllElements('author').first.text
+          : _docXML.findAllElements('itunes:author').first.text;
+    } catch (e) {}
 
-    for (var e in _docXML.findAllElements('item')) {
-      episodes.add(
-        EOFEpisode(
-          e.findElements('title').isEmpty
-              ? ''
-              : e.findElements('title').first.text,
-          e.findElements('description').isEmpty
-              ? ''
-              : e.findElements('description').first.text,
-          e.findElements('pubDate').isEmpty
-              ? ''
-              : e.findElements('pubDate').first.text,
-          e.findElements('enclosure').isEmpty
-              ? ''
-              : e.findElements('enclosure').first.getAttribute('url'),
-          e.findElements('itunes:image').isNotEmpty
-              ? e.findElements('itunes:image').first.getAttribute('href')
-              : _docXML
-                  .findAllElements('image')
-                  .first
-                  .findElements('url')
-                  .first
-                  .text,
-        ),
+    // Read the Podcast Title
+    try {
+      title = _docXML.findAllElements('title').first.text;
+    } catch (e) {}
+
+    // Read the Podcast URL
+    try {
+      url = _docXML.findAllElements('link').first.text;
+    } catch (e) {}
+
+    // Read the Podcast Copyright
+    try {
+      copyright = _docXML.findAllElements('copyright').first.text;
+    } catch (e) {}
+
+    // Read the Podcast Description
+    try {
+      description = _docXML.findAllElements('description').first.text;
+    } catch (e) {}
+
+    // Read the Podcast Cover URL
+    try {
+      podcastCoverUrl =
+          _docXML.findAllElements('image').first.findElements('url').first.text;
+    } catch (e) {}
+
+    try {
+      podcastCoverUrl ??=
+          _docXML.findAllElements('itunes:image').first.getAttribute('href');
+    } catch (e) {}
+
+    // Read the Podcast Episodes
+    episodes = _docXML.findAllElements('item').map((e) {
+      String title = '';
+      try {
+        title = e.findElements('title').first.text;
+      } catch (e) {}
+
+      String description = '';
+      try {
+        description = e.findElements('description').first.text;
+      } catch (e) {}
+
+      String pubDate = '';
+      try {
+        pubDate = e.findElements('pubDate').first.text;
+      } catch (e) {}
+
+      String url = '';
+      try {
+        url = e.findElements('enclosure').isEmpty
+            ? ''
+            : e.findElements('enclosure').first.getAttribute('url');
+      } catch (e) {}
+
+      String cover = '';
+      try {
+        cover = e.findElements('itunes:image').isNotEmpty
+            ? e.findElements('itunes:image').first.getAttribute('href')
+            : _docXML
+                .findAllElements('image')
+                .first
+                .findElements('url')
+                .first
+                .text;
+      } catch (e) {}
+
+      return EOFEpisode(
+        title: title,
+        description: description,
+        pubDate: pubDate,
+        url: url,
+        cover: cover,
       );
-    }
+    }).toList();
   }
 
   /// Episode List
@@ -82,8 +121,8 @@ class EOFPodcast {
   /// Init a Podcast Class with the Feed Address [uri]
   static Future<EOFPodcast> fromFeed(String uri) async {
     try {
-      var rssResponse = await http.get(uri);
-      var document = parse(rssResponse.body);
+      final rssResponse = await http.get(uri);
+      final document = parse(rssResponse.body);
       return EOFPodcast(document);
     } catch (e) {
       return null;

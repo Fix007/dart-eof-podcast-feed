@@ -5,13 +5,13 @@ import 'eof_playback_state.dart';
 ///
 class EOFEpisode {
   /// Constructor
-  EOFEpisode(
+  EOFEpisode({
     this.title,
     this.description,
     this.pubDate,
     this.url,
     this.cover,
-  );
+  });
 
   /// Episode Title
   String title;
