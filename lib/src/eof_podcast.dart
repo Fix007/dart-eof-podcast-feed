@@ -52,29 +52,29 @@ class EOFPodcast {
 
     // Read the Podcast Episodes
     episodes = _docXML.findAllElements('item').map((e) {
-      String title = '';
+      String title;
       try {
         title = e.findElements('title').first.text;
       } catch (e) {}
 
-      String description = '';
+      String description;
       try {
         description = e.findElements('description').first.text;
       } catch (e) {}
 
-      String pubDate = '';
+      String pubDate;
       try {
         pubDate = e.findElements('pubDate').first.text;
       } catch (e) {}
 
-      String url = '';
+      String url;
       try {
         url = e.findElements('enclosure').isEmpty
             ? ''
             : e.findElements('enclosure').first.getAttribute('url');
       } catch (e) {}
 
-      String cover = '';
+      String cover;
       try {
         cover = e.findElements('itunes:image').isNotEmpty
             ? e.findElements('itunes:image').first.getAttribute('href')
