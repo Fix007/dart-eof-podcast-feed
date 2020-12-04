@@ -1,11 +1,15 @@
 name: eof_podcast_feed
-version: 1.0.1
+version: 1.0.2
 description: eof_podcast_feed is a package for Dart and Flutter that Read and Parse RSS Feed
 homepage: https://github.com/luizeof/dart-eof-podcast-feed
 environment:
   sdk: ">=2.7.0 <3.0.0"
+
 dependencies:
-  xml: ^3.7.0
-  http: ^0.12.0+3
+  http: ^0.12.2
+  xml: ^4.5.1
+
 dev_dependencies:
-  test: ^1.9.0
+  flutter_test:
+    sdk: flutter
+  test: ^1.15.7
