@@ -41,11 +41,13 @@ class EOFPodcast {
 
     // Read the Podcast Cover URL
     try {
-      podcastCoverUrl = _docXML.findAllElements('image').first.findElements('url').first.text;
+      podcastCoverUrl ??=
+          _docXML.findAllElements('itunes:image').first.getAttribute('href');
     } catch (e) {}
 
     try {
-      podcastCoverUrl ??= _docXML.findAllElements('itunes:image').first.getAttribute('href');
+      podcastCoverUrl ??=
+          _docXML.findAllElements('image').first.findElements('url').first.text;
     } catch (e) {}
 
     // Read the Podcast Episodes
@@ -67,14 +69,21 @@ class EOFPodcast {
 
       String url;
       try {
-        url = e.findElements('enclosure').isEmpty ? '' : e.findElements('enclosure').first.getAttribute('url');
+        url = e.findElements('enclosure').isEmpty
+            ? ''
+            : e.findElements('enclosure').first.getAttribute('url');
       } catch (e) {}
 
       String cover;
       try {
         cover = e.findElements('itunes:image').isNotEmpty
             ? e.findElements('itunes:image').first.getAttribute('href')
-            : _docXML.findAllElements('image').first.findElements('url').first.text;
+            : _docXML
+                .findAllElements('image')
+                .first
+                .findElements('url')
+                .first
+                .text;
       } catch (e) {}
 
       return EOFEpisode(
@@ -129,11 +138,15 @@ class EOFPodcast {
   bool get hasEpisodes => episodes.isNotEmpty;
 
   /// Set currente playing episode index [i]
-  void isPlaying(int i) => (_playingIndex >= 0) ? _playingIndex = i : _playingIndex = -1;
+  void isPlaying(int i) =>
+      (_playingIndex >= 0) ? _playingIndex = i : _playingIndex = -1;
 
   /// Return current Playerback State
-  EOFPlaybackState get playbackState => (_playingIndex >= 0) ? nowPlaying.playbackState : EOFPlaybackState.stopped;
+  EOFPlaybackState get playbackState => (_playingIndex >= 0)
+      ? nowPlaying.playbackState
+      : EOFPlaybackState.stopped;
 
   /// Return Episode now laying
-  EOFEpisode get nowPlaying => (_playingIndex >= 0) ? episodes[_playingIndex] : null;
+  EOFEpisode get nowPlaying =>
+      (_playingIndex >= 0) ? episodes[_playingIndex] : null;
 }
