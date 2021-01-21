@@ -163,38 +163,84 @@ class Podcast {
     );
   }
 
+  /// Class Podcast
+  /// Imports the podcast from a JSON object.
+  ///
+  factory Podcast.fromJson(Map<String, dynamic> json) => Podcast(
+        category: json[CATEGORY],
+        description: json[DESCRIPTION],
+        explicit: json[EXPLICIT],
+        language: json[LANGUAGE],
+        podcastCoverUrl: json[PODCASTCOVERURL],
+        title: json[TITLE],
+        author: json[AUTHOR],
+        copyright: json[COPYRIGHT],
+        episodes: [
+          for (var data in json[EPISODES]) PodcastEpisode.fromJson(data)
+        ],
+        owner: json[OWNER],
+        url: json[URL],
+      );
+
+  /// Export to JSON.
+  ///
+  Map<String, dynamic> toJson() => {
+        TITLE: title,
+        DESCRIPTION: description,
+        PODCASTCOVERURL: podcastCoverUrl,
+        LANGUAGE: language,
+        CATEGORY: category,
+        EXPLICIT: explicit,
+        EPISODES: episodes.map((episode) => episode.toJson()).toList(),
+        OWNER: owner,
+        URL: url,
+        AUTHOR: author,
+        COPYRIGHT: copyright
+      };
+
   /// Episode List
   final List<PodcastEpisode> episodes;
+  static const String EPISODES = 'episodes';
 
   /// Podcast Title
   final String title;
+  static const String TITLE = 'title';
 
   /// Podcast Owner
   final String owner;
+  static const String OWNER = 'owner';
 
   /// Podcast Category
   final String category;
+  static const String CATEGORY = 'category';
 
   /// Podcast Language
   final String language;
+  static const String LANGUAGE = 'language';
 
   /// Podcast Url
   final String url;
+  static const String URL = 'url';
 
   /// Podcast Cover Url
   final String podcastCoverUrl;
+  static const String PODCASTCOVERURL = 'podcastCoverUrl';
 
   /// Podcast Author
   final String author;
+  static const String AUTHOR = 'author';
 
   /// Podcast Copyright
   final String copyright;
+  static const String COPYRIGHT = 'copyright';
 
   /// Podcast Description
   final String description;
+  static const String DESCRIPTION = 'description';
 
   /// Podcast Explicit
   final bool explicit;
+  static const String EXPLICIT = 'explicit';
 
   /// Init a Podcast Class with the Feed Address [uri]
   static Future<Podcast> fromFeed(String uri) async {

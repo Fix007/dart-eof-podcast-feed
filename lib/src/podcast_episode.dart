@@ -19,14 +19,23 @@ class PodcastEpisodeEnclosure {
         type: element.getAttribute('type'),
       );
 
+  factory PodcastEpisodeEnclosure.fromJson(Map<String, dynamic> json) =>
+      PodcastEpisodeEnclosure(
+          url: json[URL], length: json[LENGTH], type: json[TYPE]);
+
+  Map<String, dynamic> toJson() => {URL: url, LENGTH: length, TYPE: type};
+
   /// Podcast Mediafile
   final String url;
+  static const URL = 'url';
 
   /// Podcast length
   final String length;
+  static const LENGTH = 'length';
 
   /// Podcast mime type
   final String type;
+  static const TYPE = 'type';
 }
 
 /// Class Episode
@@ -122,35 +131,72 @@ class PodcastEpisode {
     );
   }
 
+  /// load PodcastEpisode from a JSON object
+  factory PodcastEpisode.fromJson(Map<String, dynamic> json) => PodcastEpisode(
+      title: json[TITLE],
+      enclosure: PodcastEpisodeEnclosure.fromJson(json[ENCLOSURE]),
+      guid: json[GUID],
+      description: json[DESCRIPTION],
+      duration: json[DURATION],
+      pubDate: json[PUBDATE],
+      iTunesImageUrl: json[ITUNESIMAGEURL],
+      iTunesTitle: json[ITUNESTITLE],
+      iTunesEpisode: json[ITUNESEPISODE],
+      iTunesSeason: json[ITUNESSEASON]);
+
+  /// store PodcastEpisode in a JSON object
+  Map<String, dynamic> toJson() => {
+        TITLE: title,
+        ENCLOSURE: enclosure.toJson(),
+        GUID: guid,
+        DESCRIPTION: description,
+        DURATION: duration,
+        PUBDATE: pubDate,
+        ITUNESIMAGEURL: iTunesImageUrl,
+        ITUNESTITLE: iTunesTitle,
+        ITUNESEPISODE: iTunesEpisode,
+        ITUNESSEASON: iTunesSeason
+      };
+
   /// Episode Title
   final String title;
+  static const String TITLE = 'title';
 
   /// Episode File Url
   final PodcastEpisodeEnclosure enclosure;
+  static const String ENCLOSURE = 'enclosure';
 
   /// Episode guid
   final String guid;
+  static const String GUID = 'guid';
 
   /// Episode Description
   final String description;
+  static const String DESCRIPTION = 'description';
 
   /// Episode Date
   final String pubDate;
+  static const String PUBDATE = 'pubDate';
 
   /// Episode Duration
   final String duration;
+  static const String DURATION = 'duration';
 
   /// Episode cover Url
   final String iTunesImageUrl;
+  static const String ITUNESIMAGEURL = 'iTunesImageUrl';
 
   /// Episode number
   final String iTunesTitle;
+  static const String ITUNESTITLE = 'iTunesTitle';
 
   /// Episode number
   final String iTunesEpisode;
+  static const String ITUNESEPISODE = 'iTunesEpisode';
 
   /// Episode season number
   final String iTunesSeason;
+  static const String ITUNESSEASON = 'iTunesSeason';
 
   /// Merged Episode Title
   String get episodeTitle => iTunesTitle ?? title;
