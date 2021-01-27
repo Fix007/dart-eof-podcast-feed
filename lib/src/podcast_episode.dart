@@ -7,7 +7,7 @@ import '../eof_podcast_feed.dart';
 /// Class PodcastEpisodeEnclosure
 class PodcastEpisodeEnclosure {
   /// Podcast Episode Enclosure
-  PodcastEpisodeEnclosure({this.url, this.length, this.type, this.filename});
+  PodcastEpisodeEnclosure({this.url, this.length, this.type});
 
   /// Generate from XML
   factory PodcastEpisodeEnclosure.fromXml(XmlElement element) =>
@@ -20,10 +20,7 @@ class PodcastEpisodeEnclosure {
   /// Podcast from JSON object
   factory PodcastEpisodeEnclosure.fromJson(Map<String, dynamic> json) =>
       PodcastEpisodeEnclosure(
-          url: json[URL],
-          length: json[LENGTH],
-          type: json[TYPE],
-          filename: json[FILENAME]);
+          url: json[URL], length: json[LENGTH], type: json[TYPE]);
 
   /// Podcast to JSON object
   Map<String, dynamic> toJson() => {URL: url, LENGTH: length, TYPE: type};
@@ -39,10 +36,6 @@ class PodcastEpisodeEnclosure {
   /// Podcast mime type
   final String type;
   static const TYPE = 'type';
-
-  /// local filename
-  String filename;
-  static const FILENAME = 'filename';
 }
 
 /// Class Episode
