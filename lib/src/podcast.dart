@@ -18,7 +18,7 @@ import 'podcast_episode.dart';
 ///
 class Podcast {
   /// PodcastConstructor
-  const Podcast({
+  Podcast({
     @required this.title,
     @required this.description,
     @required this.podcastCoverUrl,
@@ -137,50 +137,56 @@ class Podcast {
           element.findElements('image').first.findElements('url').first.text;
     } catch (e) {}
 
-    // Read the Podcast Episodes
-    List<PodcastEpisode> _episodes;
-    _episodes = element.findAllElements('item').expand<PodcastEpisode>((e) {
-      try {
-        return [PodcastEpisode.fromXml(e)];
-      } catch (e) {
-        debugPrint('PodcastEpisode.fromXml: $e');
-        return [];
-      }
-    }).toList();
-
-    return Podcast(
+    Podcast p = Podcast(
       title: _title,
       description: _description,
       podcastCoverUrl: _podcastCoverUrl,
       language: _language,
       category: _category,
       explicit: _explicit,
-      episodes: _episodes,
       owner: _owner,
       url: _url,
       author: _author,
       copyright: _copyright,
     );
+
+    // Read the Podcast Episodes
+    List<PodcastEpisode> _episodes;
+    _episodes = element.findAllElements('item').expand<PodcastEpisode>((e) {
+      try {
+        return [PodcastEpisode.fromXml(e, p)];
+      } catch (e) {
+        debugPrint('PodcastEpisode.fromXml: $e');
+        return [];
+      }
+    }).toList();
+
+    p.episodes = _episodes;
+
+    return p;
   }
 
   /// Class Podcast
   /// Imports the podcast from a JSON object.
   ///
-  factory Podcast.fromJson(Map<String, dynamic> json) => Podcast(
-        category: json[CATEGORY],
-        description: json[DESCRIPTION],
-        explicit: json[EXPLICIT],
-        language: json[LANGUAGE],
-        podcastCoverUrl: json[PODCASTCOVERURL],
-        title: json[TITLE],
-        author: json[AUTHOR],
-        copyright: json[COPYRIGHT],
-        episodes: [
-          for (var data in json[EPISODES]) PodcastEpisode.fromJson(data)
-        ],
-        owner: json[OWNER],
-        url: json[URL],
-      );
+  factory Podcast.fromJson(Map<String, dynamic> json) {
+    var p = Podcast(
+      category: json[CATEGORY],
+      description: json[DESCRIPTION],
+      explicit: json[EXPLICIT],
+      language: json[LANGUAGE],
+      podcastCoverUrl: json[PODCASTCOVERURL],
+      title: json[TITLE],
+      author: json[AUTHOR],
+      copyright: json[COPYRIGHT],
+      owner: json[OWNER],
+      url: json[URL],
+    );
+    p.episodes = [
+      for (var data in json[EPISODES]) PodcastEpisode.fromJson(data, p)
+    ];
+    return p;
+  }
 
   /// Export to JSON.
   ///
@@ -199,7 +205,7 @@ class Podcast {
       };
 
   /// Episode List
-  final List<PodcastEpisode> episodes;
+  List<PodcastEpisode> episodes;
   static const String EPISODES = 'episodes';
 
   /// Podcast Title

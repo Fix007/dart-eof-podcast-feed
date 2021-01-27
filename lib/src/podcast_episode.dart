@@ -2,14 +2,12 @@ import 'package:meta/meta.dart';
 import 'package:xml/xml.dart';
 import 'package:flutter/foundation.dart';
 
+import '../eof_podcast_feed.dart';
+
 /// Class PodcastEpisodeEnclosure
 class PodcastEpisodeEnclosure {
   /// Podcast Episode Enclosure
-  const PodcastEpisodeEnclosure({
-    this.url,
-    this.length,
-    this.type,
-  });
+  PodcastEpisodeEnclosure({this.url, this.length, this.type, this.filename});
 
   /// Generate from XML
   factory PodcastEpisodeEnclosure.fromXml(XmlElement element) =>
@@ -19,10 +17,15 @@ class PodcastEpisodeEnclosure {
         type: element.getAttribute('type'),
       );
 
+  /// Podcast from JSON object
   factory PodcastEpisodeEnclosure.fromJson(Map<String, dynamic> json) =>
       PodcastEpisodeEnclosure(
-          url: json[URL], length: json[LENGTH], type: json[TYPE]);
+          url: json[URL],
+          length: json[LENGTH],
+          type: json[TYPE],
+          filename: json[FILENAME]);
 
+  /// Podcast to JSON object
   Map<String, dynamic> toJson() => {URL: url, LENGTH: length, TYPE: type};
 
   /// Podcast Mediafile
@@ -36,15 +39,20 @@ class PodcastEpisodeEnclosure {
   /// Podcast mime type
   final String type;
   static const TYPE = 'type';
+
+  /// local filename
+  String filename;
+  static const FILENAME = 'filename';
 }
 
 /// Class Episode
 /// Represents the Episode Entity and atributes
 class PodcastEpisode {
   /// Constructor
-  const PodcastEpisode({
+  PodcastEpisode({
     @required this.title,
     @required this.enclosure,
+    this.parent,
     this.guid,
     this.description,
     this.duration,
@@ -56,7 +64,7 @@ class PodcastEpisode {
   });
 
   /// Constructor from XML
-  factory PodcastEpisode.fromXml(XmlElement element) {
+  factory PodcastEpisode.fromXml(XmlElement element, [Podcast parent]) {
     final PodcastEpisodeEnclosure enclosure = PodcastEpisodeEnclosure.fromXml(
         element.findElements('enclosure').first);
 
@@ -118,6 +126,7 @@ class PodcastEpisode {
     } catch (e) {}
 
     return PodcastEpisode(
+      parent: parent,
       title: title,
       enclosure: enclosure,
       guid: guid,
@@ -132,17 +141,20 @@ class PodcastEpisode {
   }
 
   /// load PodcastEpisode from a JSON object
-  factory PodcastEpisode.fromJson(Map<String, dynamic> json) => PodcastEpisode(
-      title: json[TITLE],
-      enclosure: PodcastEpisodeEnclosure.fromJson(json[ENCLOSURE]),
-      guid: json[GUID],
-      description: json[DESCRIPTION],
-      duration: json[DURATION],
-      pubDate: json[PUBDATE],
-      iTunesImageUrl: json[ITUNESIMAGEURL],
-      iTunesTitle: json[ITUNESTITLE],
-      iTunesEpisode: json[ITUNESEPISODE],
-      iTunesSeason: json[ITUNESSEASON]);
+  factory PodcastEpisode.fromJson(Map<String, dynamic> json,
+          [Podcast parent]) =>
+      PodcastEpisode(
+          parent: parent,
+          title: json[TITLE],
+          enclosure: PodcastEpisodeEnclosure.fromJson(json[ENCLOSURE]),
+          guid: json[GUID],
+          description: json[DESCRIPTION],
+          duration: json[DURATION],
+          pubDate: json[PUBDATE],
+          iTunesImageUrl: json[ITUNESIMAGEURL],
+          iTunesTitle: json[ITUNESTITLE],
+          iTunesEpisode: json[ITUNESEPISODE],
+          iTunesSeason: json[ITUNESSEASON]);
 
   /// store PodcastEpisode in a JSON object
   Map<String, dynamic> toJson() => {
@@ -157,6 +169,9 @@ class PodcastEpisode {
         ITUNESEPISODE: iTunesEpisode,
         ITUNESSEASON: iTunesSeason
       };
+
+  // Episode Podcast
+  Podcast parent;
 
   /// Episode Title
   final String title;
