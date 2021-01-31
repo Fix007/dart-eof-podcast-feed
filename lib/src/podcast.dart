@@ -34,6 +34,8 @@ class Podcast {
     this.pubDate,
     this.iTunesSubtitle,
     this.iTunesKeyWords,
+    this.subscribed = false,
+    this.notify = false,
   });
 
   /// factory [Podcast]
@@ -214,6 +216,8 @@ class Podcast {
       pubDate: json[_pubDate],
       iTunesKeyWords: json[_iTunesKeyWords],
       iTunesSubtitle: json[_iTunesSubtitle],
+      subscribed: json[_subscribed],
+      notify: json[_notify],
     );
     p.episodes = [
       for (var data in json[_episodes]) PodcastEpisode.fromJson(data, p)
@@ -239,6 +243,8 @@ class Podcast {
         _pubDate: pubDate,
         _iTunesSubtitle: iTunesSubtitle,
         _iTunesKeyWords: iTunesKeyWords,
+        _subscribed: subscribed,
+        _notify: notify,
       };
 
   /// Episode List
@@ -319,4 +325,12 @@ class Podcast {
 
   /// Return if Show has Episodes
   bool get hasEpisodes => episodes.isNotEmpty;
+
+  ///
+  bool subscribed;
+  static const String _subscribed = 'subscribed';
+
+  ///
+  bool notify;
+  static const String _notify = 'notify';
 }

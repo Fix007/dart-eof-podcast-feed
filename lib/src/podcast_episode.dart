@@ -42,24 +42,24 @@ class PodcastEpisodeEnclosure {
 /// Represents the Episode Entity and atributes
 class PodcastEpisode {
   /// Constructor
-  PodcastEpisode({
-    @required this.title,
-    @required this.enclosure,
-    this.parent,
-    this.guid,
-    this.description,
-    this.duration,
-    this.pubDate,
-    this.iTunesImageUrl,
-    this.iTunesTitle,
-    this.iTunesEpisode,
-    this.iTunesSeason,
-    this.itunesDescription,
-    this.link,
-    this.iTunesEpisodeType,
-    this.iTunesBlock,
-    this.iTunesKeywords,
-  });
+  PodcastEpisode(
+      {@required this.title,
+      @required this.enclosure,
+      this.parent,
+      this.guid,
+      this.description,
+      this.duration,
+      this.pubDate,
+      this.iTunesImageUrl,
+      this.iTunesTitle,
+      this.iTunesEpisode,
+      this.iTunesSeason,
+      this.itunesDescription,
+      this.link,
+      this.iTunesEpisodeType,
+      this.iTunesBlock,
+      this.iTunesKeywords,
+      this.lastPosition});
 
   /// Constructor from XML
   factory PodcastEpisode.fromXml(XmlElement element, [Podcast parent]) {
@@ -187,6 +187,7 @@ class PodcastEpisode {
         iTunesEpisodeType: json[_iTunesEpisodeType],
         iTunesBlock: json[_iTunesBlock],
         iTunesKeywords: json[_iTunesKeywords],
+        lastPosition: json[_lastPosition],
       );
 
   /// store PodcastEpisode in a JSON object
@@ -204,7 +205,8 @@ class PodcastEpisode {
         _itunesDescription: itunesDescription,
         _link: link,
         _iTunesEpisodeType: iTunesEpisodeType,
-        _iTunesKeywords: iTunesKeywords
+        _iTunesKeywords: iTunesKeywords,
+        _lastPosition: lastPosition,
       };
 
   /// Episode Podcast
@@ -280,4 +282,8 @@ class PodcastEpisode {
   /// Episode keywords
   final String iTunesKeywords;
   static const String _iTunesKeywords = 'itunesKeywords';
+
+  /// Last played position
+  String lastPosition;
+  static const String _lastPosition = 'lastPosition';
 }
