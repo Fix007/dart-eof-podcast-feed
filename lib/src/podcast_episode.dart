@@ -58,7 +58,6 @@ class PodcastEpisode {
     this.link,
     this.iTunesEpisodeType,
     this.iTunesBlock,
-    this.iTunesSummary,
     this.iTunesKeywords,
   });
 
@@ -144,11 +143,6 @@ class PodcastEpisode {
       iTunesBlock = element.findElements('itunes:block').first.text;
     } catch (e) {}
 
-    String iTunesSummary;
-    try {
-      iTunesSummary = element.findElements('itunes:summary').first.text;
-    } catch (e) {}
-
     String iTunesKeywords;
     try {
       iTunesKeywords = element.findElements('itunes:keywords').first.text;
@@ -170,7 +164,6 @@ class PodcastEpisode {
         link: link,
         iTunesEpisodeType: iTunesEpisodeType,
         iTunesBlock: iTunesBlock,
-        iTunesSummary: iTunesSummary,
         iTunesKeywords: iTunesKeywords);
   }
 
@@ -193,7 +186,6 @@ class PodcastEpisode {
         link: json[_link],
         iTunesEpisodeType: json[_iTunesEpisodeType],
         iTunesBlock: json[_iTunesBlock],
-        iTunesSummary: json[_iTunesSummary],
         iTunesKeywords: json[_iTunesKeywords],
       );
 
@@ -212,7 +204,6 @@ class PodcastEpisode {
         _itunesDescription: itunesDescription,
         _link: link,
         _iTunesEpisodeType: iTunesEpisodeType,
-        _iTunesSummary: iTunesSummary,
         _iTunesKeywords: iTunesKeywords
       };
 
@@ -285,10 +276,6 @@ class PodcastEpisode {
   /// If 'Yes', the episode should not appear
   final String iTunesBlock;
   static const String _iTunesBlock = 'iTunesBlock';
-
-  /// Episode Summary
-  final String iTunesSummary;
-  static const String _iTunesSummary = 'iTunesSummary';
 
   /// Episode keywords
   final String iTunesKeywords;
