@@ -20,22 +20,22 @@ class PodcastEpisodeEnclosure {
   /// Podcast from JSON object
   factory PodcastEpisodeEnclosure.fromJson(Map<String, dynamic> json) =>
       PodcastEpisodeEnclosure(
-          url: json[URL], length: json[LENGTH], type: json[TYPE]);
+          url: json[_url], length: json[_length], type: json[_type]);
 
   /// Podcast to JSON object
-  Map<String, dynamic> toJson() => {URL: url, LENGTH: length, TYPE: type};
+  Map<String, dynamic> toJson() => {_url: url, _length: length, _type: type};
 
   /// Podcast Mediafile
   final String url;
-  static const URL = 'url';
+  static const _url = 'url';
 
   /// Podcast length
   final String length;
-  static const LENGTH = 'length';
+  static const _length = 'length';
 
   /// Podcast mime type
   final String type;
-  static const TYPE = 'type';
+  static const _type = 'type';
 }
 
 /// Class Episode
@@ -54,6 +54,12 @@ class PodcastEpisode {
     this.iTunesTitle,
     this.iTunesEpisode,
     this.iTunesSeason,
+    this.itunesDescription,
+    this.link,
+    this.iTunesEpisodeType,
+    this.iTunesBlock,
+    this.iTunesSummary,
+    this.iTunesKeywords,
   });
 
   /// Constructor from XML
@@ -118,94 +124,173 @@ class PodcastEpisode {
       iTunesEpisode = element.findElements('itunes:season').first.text;
     } catch (e) {}
 
+    String itunesDescription;
+    try {
+      itunesDescription = element.findElements('itunes:season').first.text;
+    } catch (e) {}
+
+    String link;
+    try {
+      link = element.findElements('link').first.text;
+    } catch (e) {}
+
+    String iTunesEpisodeType;
+    try {
+      iTunesEpisodeType = element.findElements('itunes:episodeType').first.text;
+    } catch (e) {}
+
+    String iTunesBlock;
+    try {
+      iTunesBlock = element.findElements('itunes:block').first.text;
+    } catch (e) {}
+
+    String iTunesSummary;
+    try {
+      iTunesSummary = element.findElements('itunes:summary').first.text;
+    } catch (e) {}
+
+    String iTunesKeywords;
+    try {
+      iTunesKeywords = element.findElements('itunes:keywords').first.text;
+    } catch (e) {}
+
     return PodcastEpisode(
-      parent: parent,
-      title: title,
-      enclosure: enclosure,
-      guid: guid,
-      description: description,
-      duration: duration,
-      pubDate: pubDate,
-      iTunesImageUrl: iTunesImageUrl,
-      iTunesTitle: iTunesTitle,
-      iTunesEpisode: iTunesEpisode,
-      iTunesSeason: iTunesSeason,
-    );
+        parent: parent,
+        title: title,
+        enclosure: enclosure,
+        guid: guid,
+        description: description,
+        duration: duration,
+        pubDate: pubDate,
+        iTunesImageUrl: iTunesImageUrl,
+        iTunesTitle: iTunesTitle,
+        iTunesEpisode: iTunesEpisode,
+        iTunesSeason: iTunesSeason,
+        itunesDescription: itunesDescription,
+        link: link,
+        iTunesEpisodeType: iTunesEpisodeType,
+        iTunesBlock: iTunesBlock,
+        iTunesSummary: iTunesSummary,
+        iTunesKeywords: iTunesKeywords);
   }
 
   /// load PodcastEpisode from a JSON object
   factory PodcastEpisode.fromJson(Map<String, dynamic> json,
           [Podcast parent]) =>
       PodcastEpisode(
-          parent: parent,
-          title: json[TITLE],
-          enclosure: PodcastEpisodeEnclosure.fromJson(json[ENCLOSURE]),
-          guid: json[GUID],
-          description: json[DESCRIPTION],
-          duration: json[DURATION],
-          pubDate: json[PUBDATE],
-          iTunesImageUrl: json[ITUNESIMAGEURL],
-          iTunesTitle: json[ITUNESTITLE],
-          iTunesEpisode: json[ITUNESEPISODE],
-          iTunesSeason: json[ITUNESSEASON]);
+        parent: parent,
+        title: json[_title],
+        enclosure: PodcastEpisodeEnclosure.fromJson(json[_enclosure]),
+        guid: json[_guid],
+        description: json[_description],
+        duration: json[_duration],
+        pubDate: json[_pubDate],
+        iTunesImageUrl: json[_iTunesImageUrl],
+        iTunesTitle: json[_iTunesTitle],
+        iTunesEpisode: json[_iTunesEpisode],
+        iTunesSeason: json[_iTunesSeason],
+        itunesDescription: json[_itunesDescription],
+        link: json[_link],
+        iTunesEpisodeType: json[_iTunesEpisodeType],
+        iTunesBlock: json[_iTunesBlock],
+        iTunesSummary: json[_iTunesSummary],
+        iTunesKeywords: json[_iTunesKeywords],
+      );
 
   /// store PodcastEpisode in a JSON object
   Map<String, dynamic> toJson() => {
-        TITLE: title,
-        ENCLOSURE: enclosure.toJson(),
-        GUID: guid,
-        DESCRIPTION: description,
-        DURATION: duration,
-        PUBDATE: pubDate,
-        ITUNESIMAGEURL: iTunesImageUrl,
-        ITUNESTITLE: iTunesTitle,
-        ITUNESEPISODE: iTunesEpisode,
-        ITUNESSEASON: iTunesSeason
+        _title: title,
+        _enclosure: enclosure.toJson(),
+        _guid: guid,
+        _description: description,
+        _duration: duration,
+        _pubDate: pubDate,
+        _iTunesImageUrl: iTunesImageUrl,
+        _iTunesTitle: iTunesTitle,
+        _iTunesEpisode: iTunesEpisode,
+        _iTunesSeason: iTunesSeason,
+        _itunesDescription: itunesDescription,
+        _link: link,
+        _iTunesEpisodeType: iTunesEpisodeType,
+        _iTunesSummary: iTunesSummary,
+        _iTunesKeywords: iTunesKeywords
       };
 
-  // Episode Podcast
+  /// Episode Podcast
   Podcast parent;
 
   /// Episode Title
   final String title;
-  static const String TITLE = 'title';
+  static const String _title = 'title';
 
   /// Episode File Url
   final PodcastEpisodeEnclosure enclosure;
-  static const String ENCLOSURE = 'enclosure';
+  static const String _enclosure = 'enclosure';
 
   /// Episode guid
   final String guid;
-  static const String GUID = 'guid';
+  static const String _guid = 'guid';
 
   /// Episode Description
   final String description;
-  static const String DESCRIPTION = 'description';
+  static const String _description = 'description';
+
+  /// Episode Itunes Description
+  final String itunesDescription;
+  static const String _itunesDescription = 'itunesDescription';
+
+  /// merged [itunesDescription] and [description]
+  String get episodeDescription => itunesDescription ?? description;
 
   /// Episode Date
   final String pubDate;
-  static const String PUBDATE = 'pubDate';
+  static const String _pubDate = 'pubDate';
 
   /// Episode Duration
   final String duration;
-  static const String DURATION = 'duration';
+  static const String _duration = 'duration';
 
   /// Episode cover Url
   final String iTunesImageUrl;
-  static const String ITUNESIMAGEURL = 'iTunesImageUrl';
+  static const String _iTunesImageUrl = 'iTunesImageUrl';
 
-  /// Episode number
+  /// Episode Title for itunes
   final String iTunesTitle;
-  static const String ITUNESTITLE = 'iTunesTitle';
-
-  /// Episode number
-  final String iTunesEpisode;
-  static const String ITUNESEPISODE = 'iTunesEpisode';
-
-  /// Episode season number
-  final String iTunesSeason;
-  static const String ITUNESSEASON = 'iTunesSeason';
+  static const String _iTunesTitle = 'iTunesTitle';
 
   /// Merged Episode Title
   String get episodeTitle => iTunesTitle ?? title;
+
+  /// Episode number
+  final String iTunesEpisode;
+  static const String _iTunesEpisode = 'iTunesEpisode';
+
+  /// Episode season number
+  final String iTunesSeason;
+  static const String _iTunesSeason = 'iTunesSeason';
+
+  /// An episode link url
+  final String link;
+  static const String _link = 'LINK';
+
+  /// The episode Type
+  /// May be
+  ///   Full (default)
+  ///   Trailer
+  ///   Bonus
+  final String iTunesEpisodeType;
+  static const String _iTunesEpisodeType = 'iTunesEpisodeType';
+
+  /// The episode show or hide status.
+  /// If 'Yes', the episode should not appear
+  final String iTunesBlock;
+  static const String _iTunesBlock = 'iTunesBlock';
+
+  /// Episode Summary
+  final String iTunesSummary;
+  static const String _iTunesSummary = 'iTunesSummary';
+
+  /// Episode keywords
+  final String iTunesKeywords;
+  static const String _iTunesKeywords = 'itunesKeywords';
 }
