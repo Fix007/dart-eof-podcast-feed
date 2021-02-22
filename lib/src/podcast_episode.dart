@@ -59,7 +59,8 @@ class PodcastEpisode {
       this.iTunesEpisodeType,
       this.iTunesBlock,
       this.iTunesKeywords,
-      this.lastPosition});
+      this.lastPosition,
+      this.notes});
 
   /// Constructor from XML
   factory PodcastEpisode.fromXml(XmlElement element, [Podcast parent]) {
@@ -83,6 +84,13 @@ class PodcastEpisode {
       description ??= element.findElements('itunes:summary').first.text;
     } catch (e) {
       debugPrint('PodcastEpisode.description: $e');
+    }
+
+    String notes;
+    try {
+      notes = element.findAllElements('content:encoded').first.text;
+    } catch (e) {
+      debugPrint('PodcastEpisode.notes: $e');
     }
 
     String pubDate;
@@ -154,6 +162,7 @@ class PodcastEpisode {
         enclosure: enclosure,
         guid: guid,
         description: description,
+        notes: notes,
         duration: duration,
         pubDate: pubDate,
         iTunesImageUrl: iTunesImageUrl,
@@ -176,6 +185,7 @@ class PodcastEpisode {
         enclosure: PodcastEpisodeEnclosure.fromJson(json[_enclosure]),
         guid: json[_guid],
         description: json[_description],
+        notes: json[_notes],
         duration: json[_duration],
         pubDate: json[_pubDate],
         iTunesImageUrl: json[_iTunesImageUrl],
@@ -196,6 +206,7 @@ class PodcastEpisode {
         _enclosure: enclosure.toJson(),
         _guid: guid,
         _description: description,
+        _notes: notes,
         _duration: duration,
         _pubDate: pubDate,
         _iTunesImageUrl: iTunesImageUrl,
@@ -234,6 +245,10 @@ class PodcastEpisode {
 
   /// merged [itunesDescription] and [description]
   String get episodeDescription => itunesDescription ?? description;
+
+  /// Episode Notes
+  final String notes;
+  static const String _notes = 'notes';
 
   /// Episode Date
   final String pubDate;
